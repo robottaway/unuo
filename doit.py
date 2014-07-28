@@ -27,6 +27,10 @@ class Build():
 
 
 def get_logger(build):
+    """Get a logger for the given build.
+
+    This logger can target a specific file just for this build.
+    """
     build_log = logging.getLogger(build.id)
     build_log.setLevel(logging.INFO)
     filename = "%s/%s-%s.log" % (logs_folder, build.name, build.id)
@@ -39,16 +43,24 @@ def get_logger(build):
 
 
 def close_handlers(log):
+    """Clean up after given logger. 
+    
+    Should be called on logger when no longer needed.
+    """
     handlers = log.handlers[:]
     for handler in handlers:
         handler.close()
         log.removeHandler(handler)
 
 
-def run_and_log(args, build_log, cwd='.'):
+def run_and_log(args, build_log, cwd=None):
+    """Run given args as process, log output to given build logger.
+    """
     p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=cwd)
     for line in p.stdout:
         line = line.strip()
+        if not line:
+            continue
         print line
         build_log.info(line)
     p.wait()
@@ -60,6 +72,8 @@ def run_and_log(args, build_log, cwd='.'):
 
 
 def get_short_hash(build, build_log):
+    """Get the short hash for the HEAD of the git repo.
+    """
     p = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'], stdout=subprocess.PIPE, cwd=build.location)
     p.wait()
     if p.returncode:
@@ -67,7 +81,6 @@ def get_short_hash(build, build_log):
         build_log.info('Unable to get short hash for git repo')
         return
     githash = p.stdout.read().strip()
-    build_log.info('Git short hash is %s', githash)
     return githash
 
 

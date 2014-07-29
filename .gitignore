@@ -1,0 +1,13 @@
+*.pyc
+*.un~
+*.swp
+/build
+.DS_Store
+/warmachine.egg-info/
+.vagrant*
+wsgi
+/*.ini
+dist
+*.pem
+*.log*
+

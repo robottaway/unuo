@@ -1,0 +1,8 @@
+Flask==0.10.1
+Jinja2==2.7.3
+MarkupSafe==0.23
+Werkzeug==0.9.6
+itsdangerous==0.24
+mock==1.0.1
+-e git+ssh://git@git.groovie.org:2222/robottaway/unuo.git@5944a77afc178979cffcb2526daeb1f0d4b96010#egg=unuo-master
+voluptuous==0.8.5

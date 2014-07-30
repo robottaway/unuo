@@ -10,4 +10,4 @@ wsgi
 dist
 *.pem
 *.log*
-
+*.egg-info

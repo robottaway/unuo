@@ -1,12 +1,14 @@
 from unittest import TestCase
-from unuo.app import Build, get_logger, close_handlers
-import logging
 
 
 class TestLogger(TestCase):
     """Test the logger creation per build"""
 
     def test_get_logger(self):
+        from unuo.filelogging import get_logger
+        from unuo.models import Build
+        import logging
+
         build = Build('test-build')
         build.id = 'test'
         l = get_logger(build)
@@ -16,6 +18,9 @@ class TestLogger(TestCase):
         self.assertEqual(type(fh), logging.FileHandler)
 
     def test_close_handlers(self):
+        from unuo.filelogging import get_logger, close_handlers
+        from unuo.models import Build
+
         build = Build('test-build')
         build.id = 'test'
         l = get_logger(build)

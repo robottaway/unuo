@@ -6,3 +6,6 @@ prompt unuo to checkout the required Git repo and using the Dockerfile make a
 container. If you like it can push the container on build to a Docker registry.
 
 
+# Unit Tests
+
+python setup.py test

@@ -3,20 +3,28 @@
 Contains API methods for kicking off a build profile, adding a build profile,
 getting a listing of build profiles.
 """
+import logging
+
 from flask import Blueprint
 from flask import jsonify, request
 from unuo.errors import ApiError
 
-from unuo.filebackend import post_build, run_build, get_build_profile, \
-    get_all_profiles
-
 docker_bp = Blueprint('docker', __name__)
 
+logger = logging.getLogger('test')
 
-#@docker_bp.errorhandler(500)
-#def error_ise(error):
-#    return '{"status_code":500,"description":"oh noes!"}', 500
-#
+backend = None
+
+
+def inject_backend(_backend):
+    global backend
+    logger.info('Injecting backend %s', _backend)
+    backend = _backend
+
+# @docker_bp.errorhandler(500)
+# def error_ise(error):
+#     return '{"status_code":500,"description":"oh noes!"}', 500
+
 
 @docker_bp.errorhandler(404)
 @docker_bp.errorhandler(400)
@@ -30,13 +38,13 @@ def error_json(error):
 @docker_bp.route('/build/<name>', methods=['POST'])
 def build(name):
     """Run given build."""
-    return run_build(name)
+    return backend.run_build(name)
 
 
 @docker_bp.route('/profile', methods=['GET'])
 def list_build_profiles():
     """Responsible for listing known builds."""
-    builds = get_all_profiles()
+    builds = backend.get_all_profiles()
     return jsonify({"builds": builds})
 
 
@@ -44,5 +52,5 @@ def list_build_profiles():
 def build_container(name):
     """Responsible for creating/updating builds and launching them."""
     if request.method == 'POST':
-        return post_build(name, request.json)
-    return jsonify(**get_build_profile(name))
+        return backend.post_build(name, request.json)
+    return jsonify(**backend.get_build_profile(name))

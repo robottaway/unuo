@@ -6,3 +6,5 @@ itsdangerous==0.24
 mock==1.0.1
 -e git+ssh://git@git.groovie.org:2222/robottaway/unuo.git@5944a77afc178979cffcb2526daeb1f0d4b96010#egg=unuo-master
 voluptuous==0.8.5
+injector==0.9.0
+Flask-Injector==0.4.0

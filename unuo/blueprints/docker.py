@@ -5,21 +5,17 @@ getting a listing of build profiles.
 """
 import logging
 
-from flask import Blueprint
-from flask import jsonify, request
+from flask import Blueprint, jsonify, request
+from flask.views import View
+from injector import inject
+
 from unuo.errors import ApiError
+from unuo.ioc import backend_key
 
 docker_bp = Blueprint('docker', __name__)
 
-logger = logging.getLogger('test')
+logger = logging.getLogger(__name__)
 
-backend = None
-
-
-def inject_backend(_backend):
-    global backend
-    logger.info('Injecting backend %s', _backend)
-    backend = _backend
 
 # @docker_bp.errorhandler(500)
 # def error_ise(error):
@@ -35,22 +31,51 @@ def error_json(error):
         error.code, error.description), error.code
 
 
-@docker_bp.route('/build/<name>', methods=['POST'])
-def build(name):
-    """Run given build."""
-    return backend.run_build(name)
+class Builder(View):
+
+    @inject(backend=backend_key)
+    def __init__(self, backend):
+        self.backend = backend
+
+    def dispatch_request(self, name):
+        """Run given build."""
+        return self.backend.run_build(name)
 
 
-@docker_bp.route('/profile', methods=['GET'])
-def list_build_profiles():
-    """Responsible for listing known builds."""
-    builds = backend.get_all_profiles()
-    return jsonify({"builds": builds})
+docker_bp.add_url_rule(
+    '/build/<name>', methods=['POST'], view_func=Builder.as_view('build'))
 
 
-@docker_bp.route('/profile/<name>', methods=['GET', 'POST'])
-def build_container(name):
-    """Responsible for creating/updating builds and launching them."""
-    if request.method == 'POST':
-        return backend.post_build(name, request.json)
-    return jsonify(**backend.get_build_profile(name))
+class ProfileList(View):
+
+    @inject(backend=backend_key)
+    def __init__(self, backend):
+        self.backend = backend
+
+    def dispatch_request(self):
+        """Responsible for listing known builds."""
+        builds = self.backend.get_all_profiles()
+        return jsonify({"builds": builds})
+
+
+docker_bp.add_url_rule(
+    '/profile', methods=['GET'],
+    view_func=ProfileList.as_view('list_build_profiles'))
+
+
+class Profile(View):
+
+    @inject(backend=backend_key)
+    def __init__(self, backend):
+        self.backend = backend
+
+    def dispatch_request(self, name):
+        """Responsible for creating/updating builds and launching them."""
+        if request.method == 'POST':
+            return self.backend.post_build(name, request.json)
+        return jsonify(**self.backend.get_build_profile(name))
+
+
+docker_bp.add_url_rule(
+    '/profile/<name>', methods=['GET', 'POST'],
+    view_func=Profile.as_view('get_profile'))

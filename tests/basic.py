@@ -5,23 +5,37 @@ class TestLogger(TestCase):
     """Test the logger creation per build"""
 
     def test_get_logger(self):
-        from unuo.filelogging import get_logger
+        from unuo.filelogging import FileLoggerManager
         from unuo.models import Build
         import logging
+        import tempfile
+        import shutil
 
+        logs_folder = tempfile.mkdtemp()
+        logmanager = FileLoggerManager(logs_folder)
         build = Build('test-build')
         build.id = 'test'
-        l = get_logger(build)
+        l = logmanager.get_logger(build)
+
+        # check that folder named test exists in temp folder
+
+        # check that there is one file handler
         handlers = l.handlers
         self.assertEqual(len(handlers), 1)
         fh = handlers[0]
         self.assertEqual(type(fh), logging.FileHandler)
+        shutil.rmtree(logs_folder)
 
     def test_close_handlers(self):
-        from unuo.filelogging import get_logger, close_handlers
         from unuo.models import Build
+        import tempfile
+        from unuo.filelogging import FileLoggerManager
+        import shutil
 
+        logs_folder = tempfile.mkdtemp()
+        logsmanager = FileLoggerManager(logs_folder)
         build = Build('test-build')
         build.id = 'test'
-        l = get_logger(build)
-        close_handlers(l)
+        l = logsmanager.get_logger(build)
+        logsmanager.close_handlers(l)
+        shutil.rmtree(logs_folder)

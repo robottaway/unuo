@@ -72,7 +72,8 @@ class Profile(View):
     def dispatch_request(self, name):
         """Responsible for creating/updating builds and launching them."""
         if request.method == 'POST':
-            return self.backend.post_build(name, request.json)
+            logger.debug('profile json payload: %s', request.json)
+            self.backend.post_build(name, request.json)
         return jsonify(**self.backend.get_build_profile(name))
 
 

@@ -11,3 +11,4 @@ dist
 *.pem
 *.log*
 *.egg-info
+.coverage

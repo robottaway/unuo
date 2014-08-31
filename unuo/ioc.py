@@ -1,4 +1,4 @@
-from injector import Key, singleton, Module
+from injector import Key, singleton
 
 # Keys for IoC lookups and setting deps
 backend_key = Key('unuo_backend')
@@ -32,38 +32,3 @@ def simple_module(binder):
         docker_key,
         to=Docker_1_1_x,
         scope=singleton)
-
-
-class FileBackendTest(Module):
-
-    def configure(self, binder):
-        from injector import singleton
-        from unuo.filebackend import FileBackend
-        from unuo.ioc import backend_key
-        from unuo.config import config
-        from unuo.filelogging import FileLoggerManager
-
-        class MockDocker(object):
-            """Expose the do_build but just return junk output"""
-
-            def do_build(self, build):
-                return (x for x in ['line1', 'line2'])
-
-        binder.bind(
-            buildsfolder_key,
-            to=config.builds_folder)
-        binder.bind(
-            logsfolder_key,
-            to=config.logs_folder)
-        binder.bind(
-            backend_key,
-            to=FileBackend,
-            scope=singleton)
-        binder.bind(
-            logmanager_key,
-            to=FileLoggerManager,
-            scope=singleton)
-        binder.bind(
-            docker_key,
-            to=MockDocker,
-            scope=singleton)

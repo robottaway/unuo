@@ -2,9 +2,6 @@ import unittest
 import json
 import logging
 
-from mock import patch
-
-
 logger = logging.getLogger('test')
 logging.basicConfig(level=logging.INFO)
 
@@ -14,7 +11,7 @@ class UnuoTests(unittest.TestCase):
     def setUp(self):
         from unuo.config import config
         from unuo.factories import default_factory
-        from unuo.ioc import FileBackendTest
+        from tests.ioc import FileBackendTest
         import tempfile
         config.builds_folder = tempfile.mkdtemp()
         logger.info('Created temp build dir %s', config.builds_folder)
@@ -32,7 +29,6 @@ class UnuoTests(unittest.TestCase):
         shutil.rmtree(config.logs_folder)
 
     def test_profiles(self):
-        from unuo.filebackend import FileBackend
         # should be no profiles
         rv = self.app.get('/profile')
         j = json.loads(rv.data)

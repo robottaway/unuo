@@ -126,7 +126,7 @@ class DockerTest(unittest.TestCase):
         """Test running of do_build"""
         from unuo.docker import Docker_1_1_x
         with patch.object(Docker_1_1_x, 'run_and_log') as run_and_log:
-            run_and_log.side_effect = OSError('oh no', strerror='oh no')
+            run_and_log.side_effect = OSError(1, 'oh no')
             logmanager = Mock()
             build = Mock()
             build.repo = 'arepo'

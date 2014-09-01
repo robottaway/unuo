@@ -1,5 +1,11 @@
 language: python
 python:
   - "2.7"
-install: pip install -r requirements.txt
-script: ~./coverage.sh
+install: 
+  - pip install -r requirements.txt
+  - pip install -r requirements_testing.txt
+  - pip install python-coveralls
+script:
+  - ~./coverage.sh
+after_success:
+  - coveralls

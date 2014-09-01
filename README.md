@@ -1,6 +1,6 @@
 ## README
 
-[![Build Status](https://travis-ci.org/robottaway/unuo.svg?branch=master)](https://travis-ci.org/robottaway/unuo)
+[![Build Status](https://travis-ci.org/robottaway/unuo.svg?branch=master)](https://travis-ci.org/robottaway/unuo) [![Coverage Status](https://img.shields.io/coveralls/robottaway/unuo.svg)](https://coveralls.io/r/robottaway/unuo?branch=master)
 
 unuo is a simple Docker tool that allows you to kick off Docker builds from 
 anywhere. Most likely this will involve a CI system calling, which in will 

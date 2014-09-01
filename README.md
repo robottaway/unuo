@@ -1,4 +1,4 @@
-# README
+## README
 
 unuo is a simple Docker tool that allows you to kick off Docker builds from 
 anywhere. Most likely this will involve a CI system calling, which in will 
@@ -6,7 +6,7 @@ prompt unuo to checkout the required Git repo and using the Dockerfile make a
 container. If you like it can push the container on build to a Docker registry.
 
 
-# Install
+## Install
 
 Installing is pretty simple:
 
@@ -14,12 +14,12 @@ Installing is pretty simple:
 1. ```pip install -r requirements.txt```
 
 
-# Running
+## Running
 
 To run the app ```python unuo/app.py```
 
 
-# Unit Tests
+## Unit Tests
 
 First install dependencies: ```pip install -r requirements_test.txt```
 

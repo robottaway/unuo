@@ -29,6 +29,7 @@ class UnuoTests(unittest.TestCase):
         shutil.rmtree(config.logs_folder)
 
     def test_profiles(self):
+        """Test the profile services"""
         # should be no profiles
         rv = self.app.get('/profile')
         j = json.loads(rv.data)
@@ -38,6 +39,17 @@ class UnuoTests(unittest.TestCase):
         rv = self.app.post(
             '/profile/test',
             data=json.dumps(dict(repo='arepo', push=False, dockertag='dtag')),
+            content_type='application/json')
+        self.assertEquals(200, rv.status_code)
+        j = json.loads(rv.data)
+        self.assertTrue('repo' in j)
+        self.assertTrue('dockertag' in j)
+        self.assertTrue('push' in j)
+
+        # Update a profile
+        rv = self.app.post(
+            '/profile/test',
+            data=json.dumps(dict(repo='arepo', push=True, dockertag='dtag')),
             content_type='application/json')
         self.assertEquals(200, rv.status_code)
         j = json.loads(rv.data)

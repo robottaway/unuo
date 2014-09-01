@@ -6,6 +6,6 @@ install:
   - pip install -r requirements_testing.txt
   - pip install python-coveralls
 script:
-  - ~./coverage.sh
+  - coverage.sh
 after_success:
   - coveralls

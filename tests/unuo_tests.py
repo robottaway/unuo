@@ -45,6 +45,12 @@ class UnuoTests(unittest.TestCase):
         self.assertTrue('dockertag' in j)
         self.assertTrue('push' in j)
 
+        # Get all profiles
+        rv = self.app.get('/profile')
+        self.assertEquals(200, rv.status_code)
+        j = json.loads(rv.data)
+        self.assertEquals(1, len(j['builds']))
+
         # Get the profile
         rv = self.app.get('/profile/test')
         self.assertEquals(200, rv.status_code)
@@ -53,7 +59,18 @@ class UnuoTests(unittest.TestCase):
         self.assertTrue('dockertag' in j)
         self.assertTrue('push' in j)
 
-        # Run a build (mock out docker commands)
+        # Get a non-existing profile
+        rv = self.app.get('/profile/nope')
+        self.assertEquals(404, rv.status_code)
+
+        # Run a build
         rv = self.app.post('/build/test')
         self.assertEquals(200, rv.status_code)
         self.assertTrue('line1' in rv.data)
+
+        # Post bad profile
+        rv = self.app.post(
+            '/profile/ooops',
+            data=json.dumps(dict(joe='shmoe')),
+            content_type='application/json')
+        self.assertEquals(400, rv.status_code)

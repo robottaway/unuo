@@ -10,6 +10,7 @@ class TestLogger(TestCase):
         import logging
         import tempfile
         import shutil
+        import os
 
         logs_folder = tempfile.mkdtemp()
         logmanager = FileLoggerManager(logs_folder)
@@ -18,6 +19,8 @@ class TestLogger(TestCase):
         l = logmanager.get_logger(build)
 
         # check that folder named test exists in temp folder
+        huh = os.path.exists(logs_folder)
+        self.assertTrue(huh)
 
         # check that there is one file handler
         handlers = l.handlers
@@ -39,3 +42,11 @@ class TestLogger(TestCase):
         l = logsmanager.get_logger(build)
         logsmanager.close_handlers(l)
         shutil.rmtree(logs_folder)
+
+    def test_api_error(self):
+        from unuo.errors import ApiError
+        error = ApiError('ooops', 200)
+        d = error.to_dict()
+        self.assertIsNotNone(d)
+        j = error.to_json()
+        self.assertIsNotNone(j)

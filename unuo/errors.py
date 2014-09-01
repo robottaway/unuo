@@ -11,14 +11,14 @@ class ApiError(Exception):
     """
     code = 400
 
-    def __init__(self, description, code=None, payload=None):
+    def __init__(self, description, code=None):
         Exception.__init__(self)
         self.description = description
         if code is not None:
             self.code = code
 
     def to_dict(self):
-        return {'message': self.description, 'status_code': self.status_code}
+        return {'message': self.description, 'status_code': self.code}
 
     def to_json(self):
         return json.dumps(self.to_dict())

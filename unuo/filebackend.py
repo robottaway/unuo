@@ -65,7 +65,6 @@ class FileBackend(object):
         builds = []
         for phile in listdir(self.builds_folder):
             fp = os.path.join(self.builds_folder, phile)
-            if not os.path.isfile(fp):
-                continue
-            builds.append(phile)
+            if os.path.isfile(fp):
+                builds.append(phile)
         return builds

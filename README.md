@@ -13,7 +13,9 @@ container. If you like it can push the container on build to a Docker registry.
 Installing is pretty simple:
 
 1. make a virtual environment and activate it
+  - e.g. ```mkvirtualenv unuo``` with virtualenvwrapper
 1. ```pip install -r requirements.txt```
+1. ```python setup.py develop``` if you are developing, otherwise ```python setup.py install```
 
 
 ## Running

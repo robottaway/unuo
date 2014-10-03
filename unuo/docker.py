@@ -13,8 +13,8 @@ from unuo.ioc import logmanager_key
 class Docker_1_1_x(object):
     """provides integration with Docker and Git
 
-   NOTE: rename this to be not just docker specific?
-         Maybe inject other SCM providers?
+    NOTE: rename this to be not just docker specific?
+          Maybe inject other SCM providers?
     """
 
     @inject(log_manager=logmanager_key)

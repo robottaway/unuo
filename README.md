@@ -65,3 +65,52 @@ To run the unit tests: ```python setup.py test```
 or if you want to run them and get test coverage: ```./coverage.sh```
 
 
+## Unuo File
+
+The unuo file is simple. It is merely a dynamic [Docker file](https://docs.docker.com/reference/builder/). This means you can
+add in logic. It uses Jinja to render itself. Once rendered it will be passed
+to the ```docker build``` command via stdin.
+
+How should you get started? Just drop a file named Unuo in the base of your
+project to be cloned from Git. It probably will be best to start by writing it
+in the standard Docker file format. Once you get comfortable you can start 
+adding dynamic features.
+
+
+## Kicking off Builds
+
+This is why you want unuo. You can kick off a build to unuo by simply POSTing
+to ```/build/<profile name>```. This endpoint will create a variable ```payload```
+which contains a hash created from the POST body. This means the POST body must
+be a JSON object.
+
+So what good does this do? Well for one the payload is available in your unuo
+file! This means you can do things like pass in the repo, branch and commit
+hash mapping to a push to a Git repo. With this data you can clone that repo,
+checkout that branch and version, all in your unuo file. Now you are building
+Docker containers that track your pushes!
+
+Another powerful feature is passing in the Docker file FROM value. For example
+say you want to test your project against 2 or more versions of MySQL. Simply
+configure 2 calls to the build endpoint on push, each specifying a different
+FROM value. Now you have 2 containers that you can then use to test your
+application. You can do that manually or have another process that will take
+the containers and automatically test them.
+
+
+## Github
+
+We pretty much have built unuo to handle Github webhooks :)
+
+That means we are interested in ```push``` events, and will kick off a build
+when a webhook from Github calls on such.
+
+It would be useful to most users to check out the documentation on the push
+payload, [found here](https://developer.github.com/v3/activity/events/types/#event-name-17).
+
+The payload of any call to kick off a build will always be mapped to the 
+variable ```payload```, which means it can then be utilized in your unuo file
+to do things like check out a specfic branch and commit hash so that you can
+track checkins with builds!
+
+

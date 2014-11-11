@@ -1,4 +1,4 @@
-## README
+## UNUO, A Docker Build Automation Tool!
 
 [![Build Status](https://travis-ci.org/robottaway/unuo.svg?branch=master)](https://travis-ci.org/robottaway/unuo) [![Coverage Status](https://img.shields.io/coveralls/robottaway/unuo.svg)](https://coveralls.io/r/robottaway/unuo?branch=master)
 
@@ -113,4 +113,16 @@ variable ```payload```, which means it can then be utilized in your unuo file
 to do things like check out a specfic branch and commit hash so that you can
 track checkins with builds!
 
+
+## Example Profile POST
+
+This following code show's POSTing a build profile to a local instance.
+
+```
+curl -XPOST -H "Content-type: application/json" localhost:5000/profile/my-kraken-cart-build -d '{
+    "dockertag": "robottaway/krakencart:latest",
+    "push": false,
+    "repo": "https://git.grovie.org/robottaway/kraken-cart-docker.git"
+}'
+```
 

@@ -12,6 +12,7 @@ from unuo.config import config
 
 
 build_schema = Schema({
+    Required('name'): All(basestring, Length(min=1, max=64)),
     Required('repo'): All(basestring, Length(min=1, max=1024)),
     Optional('checkout'): All(basestring, Length(min=1, max=256)),
     Required('dockertag'): All(basestring, Length(min=1, max=256)),

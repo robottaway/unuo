@@ -54,8 +54,9 @@ class ProfileList(View):
 
     def dispatch_request(self):
         """Responsible for listing known builds."""
-        builds = self.backend.get_all_profiles()
-        return jsonify({"builds": builds})
+        profiles = self.backend.get_all_profiles()
+        print profiles
+        return jsonify({"profiles": profiles})
 
 
 docker_bp.add_url_rule(

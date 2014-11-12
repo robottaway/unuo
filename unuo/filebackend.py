@@ -53,7 +53,7 @@ class FileBackend(object):
         output back to browser/agent.
         """
         build_json = self.get_build_profile(name)
-        build = Build(name, **build_json)
+        build = Build(**build_json)
 
         def generate():
             for line in self.docker.do_build(build):
